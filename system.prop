@@ -3,6 +3,7 @@ af.fast_track_multiplier=1
 audio.deep_buffer.media=true
 audio.offload.min.duration.secs=30
 audio.offload.video=true
+ro.audio.flinger_standbytime_ms=300
 vendor.audio.av.streaming.offload.enable=true
 vendor.audio.offload.buffer.size.kb=64
 vendor.audio.offload.gapless.enabled=true
