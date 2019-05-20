@@ -39,6 +39,9 @@ debug.sf.recomputecrop=0
 ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
 
 # Media
+debug.stagefright.ccodec=0
+mm.enable.sec.smoothstreaming=true
+mm.enable.smoothstreaming=true
 drm.service.enabled=1
 vidc.enc.narrow.searchrange=1
 
