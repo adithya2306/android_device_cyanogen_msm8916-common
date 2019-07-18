@@ -40,6 +40,8 @@ ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
 
 # Media
 debug.stagefright.ccodec=0
+debug.stagefright.omx_default_rank=0
+debug.stagefright.omx_default_rank.sw-audio=1
 mm.enable.sec.smoothstreaming=true
 mm.enable.smoothstreaming=true
 drm.service.enabled=1
