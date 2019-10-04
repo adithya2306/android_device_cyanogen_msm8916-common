@@ -60,6 +60,9 @@ BOARD_HAVE_BLUETOOTH_QCOM := true
 TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
     /system/vendor/bin/mm-qcamera-daemon=23
 
+# DRM
+TARGET_ENABLE_MEDIADRM_64 := true
+
 # Dexpreopt
 ifeq ($(HOST_OS),linux)
 ifneq ($(TARGET_BUILD_VARIANT),eng)
