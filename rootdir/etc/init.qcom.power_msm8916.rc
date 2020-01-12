@@ -12,29 +12,32 @@ on enable-low-power
 
     # disable thermal core_control to update interactive governor settings
     write /sys/module/msm_thermal/core_control/enabled 0
+    write /sys/devices/system/cpu/cpu0/core_ctl/disable 1
 
-    # enable governor
+    # Switch to interactive and configure it
     write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 533330
-
-    # enable thermal core_control now
-    write /sys/module/msm_thermal/core_control/enabled 1
-
-    write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay "25000 1094400:50000"
-    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 90
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 200000
     write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 30000
-    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 998400
-    write /sys/devices/system/cpu/cpufreq/interactive/io_is_busy 0
-    write /sys/devices/system/cpu/cpufreq/interactive/target_loads "1 800000:85 998400:90 1094400:80"
+    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 533333
+    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 91
+    write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay "25000 1094400:50000"
+    write /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration 60000
     write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 50000
     write /sys/devices/system/cpu/cpufreq/interactive/max_freq_hysteresis 50000
+    write /sys/devices/system/cpu/cpufreq/interactive/powersave_bias 1
+    write /sys/devices/system/cpu/cpufreq/interactive/fast_ramp_down 1
+    write /sys/devices/system/cpu/cpufreq/interactive/target_loads "1 200000:55 400000:60 533333:70 800000:80 998400:85 1094400:95 1209600:99"
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 0
 
     # bring all CPUs online
     write /sys/devices/system/cpu/cpu1/online 1
     write /sys/devices/system/cpu/cpu2/online 1
     write /sys/devices/system/cpu/cpu3/online 1
 
+    # enable thermal core_control now
+    write /sys/module/msm_thermal/core_control/enabled 1
+    
     # Enable low power modes
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
 
@@ -42,11 +45,13 @@ on enable-low-power
     write /sys/class/net/rmnet0/queues/rx-0/rps_cpus 2
 
     # Enable core control
+    write /sys/devices/system/cpu/cpu0/core_ctl/disable 0
     write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 0
     write /sys/devices/system/cpu/cpu0/core_ctl/max_cpus 4
     write /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres 68
     write /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres 30
-    write /sys/devices/system/cpu/cpu0/core_ctl/offline_delay_ms 100
+    write /sys/devices/system/cpu/cpu0/core_ctl/offline_delay_ms 600
+    write /sys/devices/system/cpu/cpu0/core_ctl/online_delay_ms 1000
     write /sys/devices/system/cpu/cpu0/core_ctl/is_big_cluster 0
     write /sys/devices/system/cpu/cpu0/core_ctl/task_thres 4
 
@@ -79,8 +84,8 @@ on enable-low-power
     write /sys/module/wakeup/parameters/enable_wlan_pno_wl_ws 0
     write /sys/module/wakeup/parameters/enable_wcnss_filter_lock_ws 0
 
-    rm /data/system/perfd/default_values
-    start perfd
+    #rm /data/system/perfd/default_values
+    #start perfd
 
 on charger
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
