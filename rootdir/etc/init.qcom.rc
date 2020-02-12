@@ -69,14 +69,17 @@ on post-fs-data
     mkdir /data/vendor/wifi/wpa 0770 wifi wifi
     mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
 
-    # Create /data/time folder for time-services
-    mkdir /data/time 0700 system system
+    # Create folder for time-services
+    mkdir /data/vendor/time 0700 system system
 
     # Tombstones
     mkdir /data/tombstones/modem 0771 system system
     mkdir /data/tombstones/lpass 0771 system system
     mkdir /data/tombstones/wcnss 0771 system system
     mkdir /data/tombstones/dsps 0771 system system
+
+    # Start move time data to /data/vendor once post-fs-data done
+    start move_time_data
 
     setprop vold.post_fs_data_done 1
 
@@ -110,6 +113,7 @@ on boot
     # Create persist folders
     mkdir /persist/alarm 0770 system system
     mkdir /persist/display 0770 system graphics
+    mkdir /persist/time 0770 system system
 
     # Create NETMGR daemon socket area
     mkdir /dev/socket/netmgr 0750 radio radio
@@ -267,9 +271,10 @@ service thermal-engine /system/vendor/bin/thermal-engine
     writepid /dev/cpuset/system-background/tasks
 
 service time_daemon /system/vendor/bin/time_daemon
-    class late_start
-    user root
-    group root
+    class main
+    user system
+    group system
+    capabilities SYS_TIME
     writepid /dev/cpuset/system-background/tasks
 
 service wcnss-service /system/vendor/bin/wcnss_service
@@ -279,5 +284,12 @@ service wcnss-service /system/vendor/bin/wcnss_service
     oneshot
 
 service qcom-mem /system/vendor/bin/init.qcom.mem.sh
+    disabled
+    oneshot
+
+service move_time_data /system/vendor/bin/init.move_time_data.sh
+    class main
+    user system
+    group system
     disabled
     oneshot
